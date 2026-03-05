@@ -20,7 +20,7 @@ go2:  # write a heading to the user
 	@echo Usage is:    mingw32-make  [Test_HaltaFall]  [clean]
 
 clean:
-	del /q .\obj\*.*
+	rmDir /q /s .\obj
 	del /q Test_HaltaFall.exe
 	del /q phreeqc.log
 

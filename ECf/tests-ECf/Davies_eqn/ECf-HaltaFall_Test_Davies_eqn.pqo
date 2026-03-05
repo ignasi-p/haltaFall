@@ -1,5 +1,5 @@
-   Input file: D:\OneDrive\+Programming\GitHub\haltaFall\EC\tests\Davies_eqn\EC-HaltaFall_Test_Davies_eqn.pqi
-  Output file: D:\OneDrive\+Programming\GitHub\haltaFall\EC\tests\Davies_eqn\EC-HaltaFall_Test_Davies_eqn.pqo
+   Input file: D:\OneDrive\+Programming\GitHub\haltaFall\ECf\tests-ECf\Davies_eqn\ECf-HaltaFall_Test_Davies_eqn.pqi
+  Output file: D:\OneDrive\+Programming\GitHub\haltaFall\ECf\tests-ECf\Davies_eqn\ECf-HaltaFall_Test_Davies_eqn.pqo
 Database file: C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\wateq4f.dat
 
 ------------------
@@ -22,7 +22,7 @@ Reading input data for simulation 1.
 	DATABASE C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\wateq4f.dat
 	TITLE This Phreeqc file calculates 5 tests so that the
 	      results may be compared with those found in file
-	      'Test_HaltaFall.f90'.
+	      'CO3-Ca-NaCl_ECf.dat'.
 	      .
 	      First equilibrium constants are given, in case
 	      the database is changed, and also to remove
@@ -139,7 +139,7 @@ TITLE
 
  This Phreeqc file calculates 5 tests so that the
       results may be compared with those found in file
-      'Test_HaltaFall.f90'.
+      'CO3-Ca-NaCl_ECf.dat'.
       .
       First equilibrium constants are given, in case
       the database is changed, and also to remove
@@ -1376,6 +1376,6 @@ Reading input data for simulation 8.
 ------------------------------------
 
 -------------------------------
-End of Run after 0.234 Seconds.
+End of Run after 0.237 Seconds.
 -------------------------------
 

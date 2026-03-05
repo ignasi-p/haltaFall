@@ -20,7 +20,9 @@ go2:  # write a heading to the user
 	@echo Usage is:    nmake  [EC]  [clean]
 
 clean:
-	del /q .\obj\*.*
+	rmDir /q /s .\obj
+	del /q EC.exe
+	del /q /s phreeqc.log
 
 EC: Modules EC.exe
 

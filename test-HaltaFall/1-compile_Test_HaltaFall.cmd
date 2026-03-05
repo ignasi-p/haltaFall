@@ -5,6 +5,13 @@ rem echo %PATH%
 echo working directory:
 cd
 
+REM the 'obj' directory must exist
+if NOT exist ".\obj" (
+    echo.creating folder ".\obj"
+    mkdir ".\obj"
+    if ERRORLEVEL 1 (echo.can NOT create folder. Terminating... & goto xit)
+)
+
 echo.
 mingw32-make Test_HaltaFall
 
