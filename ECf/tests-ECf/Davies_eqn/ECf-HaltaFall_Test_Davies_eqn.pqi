@@ -1,0 +1,325 @@
+DATABASE C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\wateq4f.dat
+TITLE This Phreeqc file calculates 5 tests so that the
+      results may be compared with those found in file
+      'CO3-Ca-NaCl_ECf.dat'.
+      .
+      First equilibrium constants are given, in case
+      the database is changed, and also to remove
+      the 'gamma' entry from solution_species so that
+      the Davies eqn. is used.
+
+# Comment out "gamma" to force Davies equation
+#H+ primary master species
+H+ = H+
+        log_k 0
+        #-gamma 9 0
+#CO3-2 primary master species
+CO3-2 = CO3-2
+        log_k 0
+        #-gamma 3.044 0.612
+#Ca+2 primary master species
+Ca+2 = Ca+2
+        log_k 0
+        #-gamma 5 0.165
+#Cl- primary master species
+Cl- = Cl-
+        log_k 0
+        #-gamma 3.5 0.015
+#Fe+2 primary master species
+Fe+2 = Fe+2
+        log_k 0
+        #-gamma 6 0
+#Na+ primary master species
+Na+ = Na+
+        log_k 0
+        #-gamma 4 0.075
+
+#CH4 secondary master species
+CO3-2 + 10 H+ + 8 e- = CH4 + 3 H2O
+        log_k -999. # remove CH4
+
+#CaOH+               76
+Ca+2 + H2O = CaOH+ + H+
+        log_k -12.78
+        #-gamma 6 0
+
+#CaHCO3+             77
+Ca+2 + HCO3- = CaHCO3+
+        log_k 1.106  # 10.329 + 1.106 = 11.435
+        #-gamma 6 0
+#CaCO3               78
+Ca+2 + CO3-2 = CaCO3
+        log_k 3.224
+
+#CO2     could be used instead of H2CO3
+CO3-2 + 2 H+ = CO2 + H2O
+        log_k 16.681
+#HCO3-               68
+H+ + CO3-2 = HCO3-
+        log_k 10.329
+#NaCO3-              69
+Na+ + CO3-2 = NaCO3-
+        log_k 1.27
+#NaHCO3              70
+# for Na+ + H+ + CO3-2 = NaHCO3 log_k 10.079 (=10.329-0.25)
+Na+ + HCO3- = NaHCO3
+        log_k -0.25 
+#NaOH
+Na+ + H2O = NaOH + H+
+        log_k -14.4
+#OH-                 152
+H2O = OH- + H+
+        log_k -14
+#FeOH+               2
+Fe+2 + H2O = FeOH+ + H+
+        log_k -9.5
+        #-gamma 5 0
+#Fe(OH)2             105
+Fe+2 + 2 H2O = Fe(OH)2 + 2 H+
+        log_k -20.57
+#Fe(OH)3-            3
+Fe+2 + 3 H2O = Fe(OH)3- + 3 H+
+        log_k -31
+        #-gamma 5 0
+#FeCl+               542
+Fe+2 + Cl- = FeCl+
+        log_k 0.14
+        #-gamma 5 0
+#Fe+3 secondary master species  0
+Fe+2 = Fe+3 + e-
+        log_k -13.02
+        #-gamma 9 0
+#FeOH+2              1
+Fe+3 + H2O = FeOH+2 + H+
+        log_k -2.19
+        #-gamma 5 0
+#Fe(OH)2+            102
+Fe+3 + 2 H2O = Fe(OH)2+ + 2 H+
+        log_k -5.67
+        #-gamma 5.4 0
+#Fe(OH)3             103
+Fe+3 + 3 H2O = Fe(OH)3 + 3 H+
+        log_k -12.56
+#Fe(OH)4-            104
+Fe+3 + 4 H2O = Fe(OH)4- + 4 H+
+        log_k -21.6
+        #-gamma 5.4 0
+#Fe2(OH)2+4          334
+2 Fe+3 + 2 H2O = Fe2(OH)2+4 + 2 H+
+        log_k -2.95
+#Fe3(OH)4+5          335
+3 Fe+3 + 4 H2O = Fe3(OH)4+5 + 4 H+
+        log_k -999.  # exclude from the calculations
+#FeCl+2              5
+Fe+3 + Cl- = FeCl+2
+        log_k 1.48
+        #-gamma 5 0
+#FeCl2+              6
+Fe+3 + 2 Cl- = FeCl2+
+        log_k 2.13
+#FeCl3               7
+Fe+3 + 3 Cl- = FeCl3
+        log_k 1.13
+
+Fe+3 + 4 Cl- = FeCl4-
+      log_k -0.98 #13LEM/BER  # from the SIT database
+
+#H2 secondary master species
+2 H+ + 2 e- = H2
+        log_k -3.15
+#O2 secondary master species
+2 H2O = O2 + 4 H+ + 4 e-
+        log_k -86.08
+
+PHASES
+Calcite             12
+        CaCO3 = Ca+2 + CO3-2 
+        log_k           -8.48
+Aragonite           21
+        CaCO3 = Ca+2 + CO3-2 
+        log_k           -8.336
+Portlandite         539
+        Ca(OH)2 + 2H+ = Ca+2 + 2H2O 
+        log_k           22.8
+Lime
+        CaO +2H+ = Ca+2 +  H2O
+        log_k           32.5761
+Magnetite 107
+        Fe3O4 + 8 H+ = 2 Fe+3 + Fe+2 + 4 H2O
+        log_k 3.737
+Goethite 110
+        FeOOH + 3 H+ = Fe+3 + 2 H2O
+        log_k -1
+Fe(OH)2(cr) # from the SIT database
+        Fe(OH)2 = Fe+2 - 2 H+ + 2 H2O
+        log_k 12.78
+Fe(alpha,cr) # from the SIT database
+        Fe = Fe+2 + 2 e-
+        log_k 15.89
+
+# ----------------------------------------------------------------------------
+# reactions in file 'Fe.dat':
+# 1.5 Fe+2 = Fe+3 + 0.5 Fe(s)  log_k = -13.02 - 0.5(15.89) = -20.965
+# 1.5 Fe+2 + H2O = FeOH+2 + H+ + 0.5 Fe(s) log_k = -2.19 +(-20.965) = -23.155
+# 1.5 Fe+2 + 2H2O = Fe(OH)2+ + 2H+ + 0.5 Fe(s) log_k = -5.67 +(-20.965) = -26.635
+# 1.5 Fe+2 + 3H2O = Fe(OH)3 + 3H+ + 0.5 Fe(s) log_k = -12.56 +(-20.965) = -33.525
+# 1.5 Fe+2 + 4H2O = Fe(OH)4- + 4H+ + 0.5 Fe(s) log_k = -21.6 +(-20.965) = -42.565
+# 3.0 Fe+2 + 2H2O = Fe2(OH)2+4 +2H+ + Fe(s)  log_k = -2.95 +2(-20.965) = -44.88
+# 1.5 Fe+2 + Cl- = FeCl+2 + 0.5 Fe(s) log_k = 1.48 +(-20.965) = -19.485
+# 1.5 Fe+2 + 2Cl- = FeCl2+ + 0.5 Fe(s) log_k = 2.13 +(-20.965) = -18.835
+# 1.5 Fe+2 + 3Cl- = FeCl3 + 0.5 Fe(s) log_k = 1.13 +(-20.965) = -19.835
+# 1.5 Fe+2 + 4Cl- = FeCl4- + 0.5 Fe(s) log_k = -0.98 +(-20.965) = -21.945
+# 0.5 Fe(s) = 0.5 Fe+2 + e-          log_k = 0.5(15.89) = 7.945
+# Fe(s) + 2 H+ = Fe+2 + H2           log_k = -3.15 + 2(7.945) = 12.74
+# 2Fe+2 + 2H2O = 4 H+ + 2Fe(s) + O2  log_k = -86.08 -4(7.945) = -117.86
+# 4 Fe+2 + 4H2O = Fe3O4(s) + 8H+ + Fe(s) log_k = -3.737 +2(-20.965) = -45.667
+# 1.5 Fe+2 + 2H2O = FeOOH(s) + 3H+ + Fe(s) log_k = 1 +(-20.965) = -19.965
+# 
+
+USER_PRINT
+ -start
+ 10 PRINT "****************************************"
+ 15 PRINT "Debye-Hückel A=",STR_F$(DH_A,6,4),", B=",STR_F$(DH_B,6,4)
+ 99 REM # print redox potential
+100 slope = LOG(10)*8.31451*TK/96485.309
+110 PRINT "Eh =",STR_F$(1000*(-LA("e-")*slope),7,1),"mV  (slope =",STR_F$(slope*1000,6,2),")"
+120 e0_fe = -slope*(LK_SPECIES("Fe+3"))
+130 eh_fe = -0.99999
+140 IF LA("Fe+2") > -99 THEN eh_fe = e0_fe - slope*(LA("Fe+2")-LA("Fe+3"))
+150 IF LA("Fe+2") > -99 THEN PRINT "Eh (Fe(2)/Fe(3)) =",STR_F$(1000*eh_fe,6,1),"mV  (pe =",STR_F$(eh_fe/slope,6,2),")"
+999 PRINT "****************************************"
+ -end
+END
+
+TITLE **************************************************************************
+      Test 1: Speciation at pH=8.2 of an aqueous solution with 0.01 mol NaHCO3
+      Note: solids are not involved.
+      Expected [CO3-2] = 9.85e-5, log Gamma(CO3-2)= -0.180
+      **************************************************************************
+SOLUTION
+    temp      25
+    pH        8.2
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    C(4)      0.01
+    Na        0.01
+    -water    1 # kg
+END
+
+TITLE **************************************************************************
+      Test 2: Find the pH of an aqueous solution with 0.01 mol NaHCO3
+      Note: solids are not involved.
+      Expected: pH = 8.222
+      **************************************************************************
+
+SOLUTION
+    temp      25
+    pH        7 charge
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    C(4)      0.01
+    Na        0.01
+    -water    1 # kg
+END
+
+TITLE **************************************************************************
+      Test 3: Find pH and calcite precipitated of an aqueous solution
+      with 0.01 mol CaCl2 and 0.01 Na2CO3
+      Only one solid (calcite) is allowed to precipitate.
+      Expected: pH = 9.93 calcite = 9.82e-03
+      **************************************************************************
+SOLUTION
+    temp      25
+    pH        7 charge
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    C(4)      0.01
+    Na        0.02
+    Ca        0.01
+    Cl        0.02
+    -water    1 # kg
+
+EQUILIBRIUM_PHASES
+    Calcite   0 0
+END
+
+TITLE **************************************************************************
+      Test 4: Find pH and solids precipitated of an aqueous solution
+      with 0.01 mol CaCl2, 0.1 NaOH and 0.001 Na2CO3
+      Several solids may precipitate.
+      Expected: pH = 12.841, calcite = 9.83e-04, portlandite = 3.38e-03
+      **************************************************************************
+SOLUTION
+    temp      25
+    pH        7 charge
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    C(4)      0.001
+    Na        0.102
+    Ca        0.01
+    Cl        0.02
+    -water    1 # kg
+
+EQUILIBRIUM_PHASES
+    Calcite     0 0
+    Aragonite   0 0
+    Portlandite 0 0
+    Lime        0 0
+END
+
+TITLE **************************************************************************
+      Test 5: Find pH of an aqueous solution with 0.02 mol NaCl and 0.001 Na2CO3
+      This is a system with several possible solid products,
+      similar to Test 4, but here no solid precipitates.
+      Expected: pH= 10.416
+      **************************************************************************
+SOLUTION
+    temp      25
+    pH        7 charge
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    C(4)      0.001
+    Na        0.022
+    Cl        0.02
+    Ca        1e-25  # to suppress warning messages
+    -water    1 # kg
+EQUILIBRIUM_PHASES
+    Calcite     0 0
+    Aragonite   0 0
+    Portlandite 0 0
+    Lime        0 0
+END
+
+TITLE **************************************************************************
+      Test 6. Find pH and redox potential and solids that precipitate
+      for an aqueous solution with 1E-5 mol HCl and 0.01 mol Fe(metal).
+      Several possible solid reaction products.
+      Expected: pH= 7.819,  pe= -8.456,  magnetite= 0.00333 mol
+      **************************************************************************
+SOLUTION 4
+    temp      25
+    pH        7 charge
+    pe        0 O2(g) -28  # neutral redox
+    redox     pe
+    units     mol/kgw
+    density   1
+    Cl        1.e-5
+    -water    1 # kg
+REACTION
+    Fe(alpha,cr) 1
+    0.01 moles in 1 steps
+EQUILIBRIUM_PHASES
+    Magnetite     0 0
+    Goethite      0 0
+    Fe(OH)2(cr)   0 0
+END

@@ -1,0 +1,31 @@
+ 6, 4, 3, 0,   /DATABASE (HYDRA), t= 25, p= 1
+H+
+SO4 2-
+Ca 2+
+Na+
+Cl-
+H2O
+CaOH+              ,  -12.78   -1  0  1  0  0  1
+CaSO4              ,   2.31     0  1  1  0  0  0
+HSO4-              ,   1.980    1  1  0  0  0  0
+OH-                ,  -14.00   -1  0  0  0  0  1
+CaSO4(cr)          ,   4.44     0  1  1  0  0  0 /anhydrite
+CaSO4·2H2O(cr)     ,   4.61     0  1  1  0  0  2 /gypsum
+NaCl(s)            ,  -1.59     0  0  0  1  1  0 /halite
+-5
+/ H+   SO4-2  Ca+2   Na+     Cl-     H2O
+LA,-7, T,0.5, T,0,   T,1,    T,0,    LA,0
+T,0,   T,0.2, T,0.2, T,0.2,  T,0.2,  LA,0
+T,0.4, T,0.4, T,0.2, T,0,    T,0,    LA,0
+T,0,   T,0,   T,0,   T,8,    T,8,    LA,0
+T,0,   T,0,   T,1,   T,8,    T,10,   LA,0
+point 1: Speciation at pH=7 of an aqueous solution with 0.5 mol Na2SO4
+         expected: log act-coef for HSO4- = -0.230, I= 1.5, phi= 0.723
+point 2: Find the solubility of gypsum in 0.2 mol NaCl
+         expected: 0.0249 (=Ca solub.), I= 0.279, pH= 7.06, phi= 0.901
+point 3: Find the solubility of gypsum in 0.2 mol H2SO4
+         expected: 0.0172 (=Ca solub.), I= 0.292, phi= 0.890, pH= 0.806
+point 4: Find the solubility of halite in H2O
+         expected: 7.13 (=Na), pH= 6.78, I= 7.13, phi= 1.169
+point 5: Find the solubility of halite in 1.0 molal CaCl2
+         expected: 5.49 (=Na), pH= 6.03, I= 8.49, phi= 1.285

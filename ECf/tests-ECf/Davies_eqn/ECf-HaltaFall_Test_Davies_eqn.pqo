@@ -1,0 +1,1381 @@
+   Input file: D:\OneDrive\+Programming\GitHub\haltaFall\EC\tests\Davies_eqn\EC-HaltaFall_Test_Davies_eqn.pqi
+  Output file: D:\OneDrive\+Programming\GitHub\haltaFall\EC\tests\Davies_eqn\EC-HaltaFall_Test_Davies_eqn.pqo
+Database file: C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\wateq4f.dat
+
+------------------
+Reading data base.
+------------------
+
+	SOLUTION_MASTER_SPECIES
+	SOLUTION_SPECIES
+	PHASES
+	EXCHANGE_MASTER_SPECIES
+	EXCHANGE_SPECIES
+	SURFACE_MASTER_SPECIES
+	SURFACE_SPECIES
+	RATES
+	END
+------------------------------------
+Reading input data for simulation 1.
+------------------------------------
+
+	DATABASE C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\wateq4f.dat
+	TITLE This Phreeqc file calculates 5 tests so that the
+	      results may be compared with those found in file
+	      'Test_HaltaFall.f90'.
+	      .
+	      First equilibrium constants are given, in case
+	      the database is changed, and also to remove
+	      the 'gamma' entry from solution_species so that
+	      the Davies eqn. is used.
+	H+ = H+
+	        log_k 0
+	CO3-2 = CO3-2
+	        log_k 0
+	Ca+2 = Ca+2
+	        log_k 0
+	Cl- = Cl-
+	        log_k 0
+	Fe+2 = Fe+2
+	        log_k 0
+	Na+ = Na+
+	        log_k 0
+	CO3-2 + 10 H+ + 8 e- = CH4 + 3 H2O
+	        log_k -999. # remove CH4
+	Ca+2 + H2O = CaOH+ + H+
+	        log_k -12.78
+	Ca+2 + HCO3- = CaHCO3+
+	        log_k 1.106  # 10.329 + 1.106 = 11.435
+	Ca+2 + CO3-2 = CaCO3
+	        log_k 3.224
+	CO3-2 + 2 H+ = CO2 + H2O
+	        log_k 16.681
+	H+ + CO3-2 = HCO3-
+	        log_k 10.329
+	Na+ + CO3-2 = NaCO3-
+	        log_k 1.27
+	Na+ + HCO3- = NaHCO3
+	        log_k -0.25 
+	Na+ + H2O = NaOH + H+
+	        log_k -14.4
+	H2O = OH- + H+
+	        log_k -14
+	Fe+2 + H2O = FeOH+ + H+
+	        log_k -9.5
+	Fe+2 + 2 H2O = Fe(OH)2 + 2 H+
+	        log_k -20.57
+	Fe+2 + 3 H2O = Fe(OH)3- + 3 H+
+	        log_k -31
+	Fe+2 + Cl- = FeCl+
+	        log_k 0.14
+	Fe+2 = Fe+3 + e-
+	        log_k -13.02
+	Fe+3 + H2O = FeOH+2 + H+
+	        log_k -2.19
+	Fe+3 + 2 H2O = Fe(OH)2+ + 2 H+
+	        log_k -5.67
+	Fe+3 + 3 H2O = Fe(OH)3 + 3 H+
+	        log_k -12.56
+	Fe+3 + 4 H2O = Fe(OH)4- + 4 H+
+	        log_k -21.6
+	2 Fe+3 + 2 H2O = Fe2(OH)2+4 + 2 H+
+	        log_k -2.95
+	3 Fe+3 + 4 H2O = Fe3(OH)4+5 + 4 H+
+	        log_k -999.  # exclude from the calculations
+	Fe+3 + Cl- = FeCl+2
+	        log_k 1.48
+	Fe+3 + 2 Cl- = FeCl2+
+	        log_k 2.13
+	Fe+3 + 3 Cl- = FeCl3
+	        log_k 1.13
+	Fe+3 + 4 Cl- = FeCl4-
+	      log_k -0.98 #13LEM/BER  # from the SIT database
+	2 H+ + 2 e- = H2
+	        log_k -3.15
+	2 H2O = O2 + 4 H+ + 4 e-
+	        log_k -86.08
+	PHASES
+	Calcite             12
+	        CaCO3 = Ca+2 + CO3-2 
+	        log_k           -8.48
+	Aragonite           21
+	        CaCO3 = Ca+2 + CO3-2 
+	        log_k           -8.336
+	Portlandite         539
+	        Ca(OH)2 + 2H+ = Ca+2 + 2H2O 
+	        log_k           22.8
+	Lime
+	        CaO +2H+ = Ca+2 +  H2O
+	        log_k           32.5761
+	Magnetite 107
+	        Fe3O4 + 8 H+ = 2 Fe+3 + Fe+2 + 4 H2O
+	        log_k 3.737
+	Goethite 110
+	        FeOOH + 3 H+ = Fe+3 + 2 H2O
+	        log_k -1
+	Fe(OH)2(cr) # from the SIT database
+	        Fe(OH)2 = Fe+2 - 2 H+ + 2 H2O
+	        log_k 12.78
+	Fe(alpha,cr) # from the SIT database
+	        Fe = Fe+2 + 2 e-
+	        log_k 15.89
+	USER_PRINT
+	 start
+	 10 PRINT "****************************************"
+	 15 PRINT "Debye-Hückel A=",STR_F$(DH_A,6,4),", B=",STR_F$(DH_B,6,4)
+	 99 REM # print redox potential
+	100 slope = LOG(10)*8.31451*TK/96485.309
+	110 PRINT "Eh =",STR_F$(1000*(-LA("e-")*slope),7,1),"mV  (slope =",STR_F$(slope*1000,6,2),")"
+	120 e0_fe = -slope*(LK_SPECIES("Fe+3"))
+	130 eh_fe = -0.99999
+	140 IF LA("Fe+2") > -99 THEN eh_fe = e0_fe - slope*(LA("Fe+2")-LA("Fe+3"))
+	150 IF LA("Fe+2") > -99 THEN PRINT "Eh (Fe(2)/Fe(3)) =",STR_F$(1000*eh_fe,6,1),"mV  (pe =",STR_F$(eh_fe/slope,6,2),")"
+	999 PRINT "****************************************"
+	 end
+	END
+-----
+TITLE
+-----
+
+ This Phreeqc file calculates 5 tests so that the
+      results may be compared with those found in file
+      'Test_HaltaFall.f90'.
+      .
+      First equilibrium constants are given, in case
+      the database is changed, and also to remove
+      the 'gamma' entry from solution_species so that
+      the Davies eqn. is used.
+H+ = H+
+        log_k 0
+CO3-2 = CO3-2
+        log_k 0
+Ca+2 = Ca+2
+        log_k 0
+Cl- = Cl-
+        log_k 0
+Fe+2 = Fe+2
+        log_k 0
+Na+ = Na+
+        log_k 0
+CO3-2 + 10 H+ + 8 e- = CH4 + 3 H2O
+        log_k -999. 
+Ca+2 + H2O = CaOH+ + H+
+        log_k -12.78
+Ca+2 + HCO3- = CaHCO3+
+        log_k 1.106  
+Ca+2 + CO3-2 = CaCO3
+        log_k 3.224
+CO3-2 + 2 H+ = CO2 + H2O
+        log_k 16.681
+H+ + CO3-2 = HCO3-
+        log_k 10.329
+Na+ + CO3-2 = NaCO3-
+        log_k 1.27
+Na+ + HCO3- = NaHCO3
+        log_k -0.25 
+Na+ + H2O = NaOH + H+
+        log_k -14.4
+H2O = OH- + H+
+        log_k -14
+Fe+2 + H2O = FeOH+ + H+
+        log_k -9.5
+Fe+2 + 2 H2O = Fe(OH)2 + 2 H+
+        log_k -20.57
+Fe+2 + 3 H2O = Fe(OH)3- + 3 H+
+        log_k -31
+Fe+2 + Cl- = FeCl+
+        log_k 0.14
+Fe+2 = Fe+3 + e-
+        log_k -13.02
+Fe+3 + H2O = FeOH+2 + H+
+        log_k -2.19
+Fe+3 + 2 H2O = Fe(OH)2+ + 2 H+
+        log_k -5.67
+Fe+3 + 3 H2O = Fe(OH)3 + 3 H+
+        log_k -12.56
+Fe+3 + 4 H2O = Fe(OH)4- + 4 H+
+        log_k -21.6
+2 Fe+3 + 2 H2O = Fe2(OH)2+4 + 2 H+
+        log_k -2.95
+3 Fe+3 + 4 H2O = Fe3(OH)4+5 + 4 H+
+        log_k -999.  
+Fe+3 + Cl- = FeCl+2
+        log_k 1.48
+Fe+3 + 2 Cl- = FeCl2+
+        log_k 2.13
+Fe+3 + 3 Cl- = FeCl3
+        log_k 1.13
+Fe+3 + 4 Cl- = FeCl4-
+      log_k -0.98 
+2 H+ + 2 e- = H2
+        log_k -3.15
+2 H2O = O2 + 4 H+ + 4 e-
+        log_k -86.08
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 2.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 1: Speciation at pH=8.2 of an aqueous solution with 0.01 mol NaHCO3
+	      Note: solids are not involved.
+	      Expected [CO3-2] = 9.85e-5, log Gamma(CO3-2)= -0.180
+	      **************************************************************************
+	SOLUTION
+	    temp      25
+	    pH        8.2
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    C(4)      0.01
+	    Na        0.01
+	    water    1 # kg
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 1: Speciation at pH=8.2 of an aqueous solution with 0.01 mol NaHCO3
+      Note: solids are not involved.
+      Expected [CO3-2] = 9.85e-5, log Gamma(CO3-2)= -0.180
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   331.1 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C(4)              1.000e-02   1.000e-02
+	Na                1.000e-02   1.000e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =   8.200    
+                                       pe  =   5.597      Equilibrium with O2(g)
+                        Activity of water  =   1.000
+                 Ionic strength (mol/kgw)  =   1.003e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   9.987e-03
+                       Total CO2 (mol/kg)  =   1.000e-02
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   1.322e-05
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.07
+                               Iterations  =   5
+                                  Total H  = 1.110222e+02
+                                  Total O  = 5.553609e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             1.763e-06   1.586e-06    -5.754    -5.800    -0.046     (0)  
+   H+              6.909e-09   6.310e-09    -8.161    -8.200    -0.039      0.00
+   H2O             5.551e+01   9.997e-01     1.744    -0.000     0.000     18.07
+C(4)          1.000e-02
+   HCO3-           9.722e-03   8.797e-03    -2.012    -2.056    -0.043     (0)  
+   CO2             1.246e-04   1.248e-04    -3.905    -3.904     0.001     (0)  
+   CO3-2           9.750e-05   6.539e-05    -4.011    -4.185    -0.174     (0)  
+   NaHCO3          4.431e-05   4.441e-05    -4.354    -4.352     0.001     (0)  
+   NaCO3-          1.208e-05   1.093e-05    -4.918    -4.961    -0.043     (0)  
+H(0)          3.598e-31
+   H2              1.799e-31   1.803e-31   -30.745   -30.744     0.001     (0)  
+Na            1.000e-02
+   Na+             9.944e-03   8.977e-03    -2.002    -2.047    -0.044     (0)  
+   NaHCO3          4.431e-05   4.441e-05    -4.354    -4.352     0.001     (0)  
+   NaCO3-          1.208e-05   1.093e-05    -4.918    -4.961    -0.043     (0)  
+O(0)          2.557e-31
+   O2              1.278e-31   1.281e-31   -30.893   -30.892     0.001     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  CO2(g)           -2.44     -3.90   -1.47  CO2
+  H2(g)           -27.59    -30.74   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Nahcolite        -3.55     -4.10   -0.55  NaHCO3
+  Natron           -6.97     -8.28   -1.31  Na2CO3:10H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+  Thermonatrite    -8.40     -8.28    0.13  Na2CO3:H2O
+  Trona           -11.59    -12.38   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 3.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 2: Find the pH of an aqueous solution with 0.01 mol NaHCO3
+	      Note: solids are not involved.
+	      Expected: pH = 8.222
+	      **************************************************************************
+	SOLUTION
+	    temp      25
+	    pH        7 charge
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    C(4)      0.01
+	    Na        0.01
+	    water    1 # kg
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 2: Find the pH of an aqueous solution with 0.01 mol NaHCO3
+      Note: solids are not involved.
+      Expected: pH = 8.222
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   329.7 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C(4)              1.000e-02   1.000e-02
+	Na                1.000e-02   1.000e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =   8.224      Charge balance
+                                       pe  =   5.573      Equilibrium with O2(g)
+                        Activity of water  =   1.000
+                 Ionic strength (mol/kgw)  =   1.005e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   1.000e-02
+                       Total CO2 (mol/kg)  =   1.000e-02
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   6.048e-13
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.00
+                               Iterations  =   7
+                                  Total H  = 1.110222e+02
+                                  Total O  = 5.553610e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             1.864e-06   1.677e-06    -5.730    -5.775    -0.046     (0)  
+   H+              6.533e-09   5.966e-09    -8.185    -8.224    -0.039      0.00
+   H2O             5.551e+01   9.997e-01     1.744    -0.000     0.000     18.07
+C(4)          1.000e-02
+   HCO3-           9.722e-03   8.797e-03    -2.012    -2.056    -0.043     (0)  
+   CO2             1.178e-04   1.180e-04    -3.929    -3.928     0.001     (0)  
+   CO3-2           1.031e-04   6.915e-05    -3.987    -4.160    -0.174     (0)  
+   NaHCO3          4.430e-05   4.441e-05    -4.354    -4.353     0.001     (0)  
+   NaCO3-          1.277e-05   1.156e-05    -4.894    -4.937    -0.043     (0)  
+H(0)          3.598e-31
+   H2              1.799e-31   1.803e-31   -30.745   -30.744     0.001     (0)  
+Na            1.000e-02
+   Na+             9.943e-03   8.976e-03    -2.002    -2.047    -0.044     (0)  
+   NaHCO3          4.430e-05   4.441e-05    -4.354    -4.353     0.001     (0)  
+   NaCO3-          1.277e-05   1.156e-05    -4.894    -4.937    -0.043     (0)  
+O(0)          2.557e-31
+   O2              1.278e-31   1.281e-31   -30.893   -30.892     0.001     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  CO2(g)           -2.46     -3.93   -1.47  CO2
+  H2(g)           -27.59    -30.74   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Nahcolite        -3.55     -4.10   -0.55  NaHCO3
+  Natron           -6.94     -8.26   -1.31  Na2CO3:10H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+  Thermonatrite    -8.38     -8.25    0.13  Na2CO3:H2O
+  Trona           -11.56    -12.36   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 4.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 3: Find pH and calcite precipitated of an aqueous solution
+	      with 0.01 mol CaCl2 and 0.01 Na2CO3
+	      Only one solid (calcite) is allowed to precipitate.
+	      Expected: pH = 9.93 calcite = 9.82e-03
+	      **************************************************************************
+	SOLUTION
+	    temp      25
+	    pH        7 charge
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    C(4)      0.01
+	    Na        0.02
+	    Ca        0.01
+	    Cl        0.02
+	    water    1 # kg
+	EQUILIBRIUM_PHASES
+	    Calcite   0 0
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 3: Find pH and calcite precipitated of an aqueous solution
+      with 0.01 mol CaCl2 and 0.01 Na2CO3
+      Only one solid (calcite) is allowed to precipitate.
+      Expected: pH = 9.93 calcite = 9.82e-03
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   179.8 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C(4)              1.000e-02   1.000e-02
+	Ca                1.000e-02   1.000e-02
+	Cl                2.000e-02   2.000e-02
+	Na                2.000e-02   2.000e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =  10.758      Charge balance
+                                       pe  =   3.039      Equilibrium with O2(g)
+                        Activity of water  =   0.999
+                 Ionic strength (mol/kgw)  =   3.527e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   2.000e-02
+                       Total CO2 (mol/kg)  =   1.000e-02
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   3.089e-11
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.00
+                               Iterations  =   8
+                                  Total H  = 1.110139e+02
+                                  Total O  = 5.553693e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             6.863e-04   5.725e-04    -3.163    -3.242    -0.079     (0)  
+   H+              2.013e-11   1.747e-11   -10.696   -10.758    -0.062      0.00
+   H2O             5.551e+01   9.991e-01     1.744    -0.000     0.000     18.07
+C(4)          1.000e-02
+   CaCO3           5.701e-03   5.748e-03    -2.244    -2.241     0.004     (0)  
+   CO3-2           3.026e-03   1.561e-03    -2.519    -2.807    -0.287     (0)  
+   HCO3-           6.863e-04   5.817e-04    -3.163    -3.235    -0.072     (0)  
+   NaCO3-          5.619e-04   4.763e-04    -3.250    -3.322    -0.072     (0)  
+   CaHCO3+         1.915e-05   1.630e-05    -4.718    -4.788    -0.070     (0)  
+   NaHCO3          5.315e-06   5.358e-06    -5.275    -5.271     0.004     (0)  
+   CO2             2.268e-08   2.287e-08    -7.644    -7.641     0.004     (0)  
+Ca            1.000e-02
+   CaCO3           5.701e-03   5.748e-03    -2.244    -2.241     0.004     (0)  
+   Ca+2            4.255e-03   2.197e-03    -2.371    -2.658    -0.287     (0)  
+   CaOH+           2.450e-05   2.085e-05    -4.611    -4.681    -0.070     (0)  
+   CaHCO3+         1.915e-05   1.630e-05    -4.718    -4.788    -0.070     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.670e-02    -1.699    -1.777    -0.078     (0)  
+H(0)          3.575e-31
+   H2              1.788e-31   1.802e-31   -30.748   -30.744     0.004     (0)  
+Na            2.000e-02
+   Na+             1.943e-02   1.638e-02    -1.711    -1.786    -0.074     (0)  
+   NaCO3-          5.619e-04   4.763e-04    -3.250    -3.322    -0.072     (0)  
+   NaHCO3          5.315e-06   5.358e-06    -5.275    -5.271     0.004     (0)  
+O(0)          2.542e-31
+   O2              1.271e-31   1.281e-31   -30.896   -30.892     0.004     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite         2.87     -5.46   -8.34  CaCO3
+  Calcite           3.02     -5.46   -8.48  CaCO3
+  CO2(g)           -6.17     -7.64   -1.47  CO2
+  H2(g)           -27.59    -30.74   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -5.14     -3.56    1.58  NaCl
+  Lime            -13.72     18.86   32.58  CaO
+  Nahcolite        -4.47     -5.02   -0.55  NaHCO3
+  Natron           -5.07     -6.38   -1.31  Na2CO3:10H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+  Portlandite      -3.94     18.86   22.80  Ca(OH)2
+  Thermonatrite    -6.50     -6.38    0.13  Na2CO3:H2O
+  Trona           -10.60    -11.40   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+-----------------------------------------
+Beginning of batch-reaction calculations.
+-----------------------------------------
+
+Reaction step 1.
+
+Using solution 1.	
+Using pure phase assemblage 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   463.6 mV  (slope =  59.16 ) 
+**************************************** 
+
+-------------------------------Phase assemblage--------------------------------
+
+                                                      Moles in assemblage
+Phase               SI  log IAP  log K(T, P)   Initial       Final       Delta
+
+Calcite           0.00    -8.48     -8.48    0.000e+00   9.826e-03   9.826e-03
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C                 1.738e-04   1.738e-04
+	Ca                1.738e-04   1.738e-04
+	Cl                2.000e-02   2.000e-02
+	Na                2.000e-02   2.000e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =   9.928      Charge balance
+                                       pe  =   7.836      Adjusted to redox equilibrium
+                        Activity of water  =   0.999
+                 Ionic strength (mol/kgw)  =   2.055e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   3.476e-04
+                       Total CO2 (mol/kg)  =   1.738e-04
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   3.260e-11
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.00
+                               Iterations  =   8
+                                  Total H  = 1.110139e+02
+                                  Total O  = 5.550745e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             9.793e-05   8.475e-05    -4.009    -4.072    -0.063     (0)  
+   H+              1.329e-10   1.180e-10    -9.877    -9.928    -0.051      0.00
+   H2O             5.551e+01   9.993e-01     1.744    -0.000     0.000     18.07
+C(-4)         0.000e+00
+   CH4             0.000e+00   0.000e+00  -125.372  -125.370     0.002     (0)  
+C(4)          1.738e-04
+   HCO3-           9.709e-05   8.490e-05    -4.013    -4.071    -0.058     (0)  
+   CO3-2           5.770e-05   3.373e-05    -4.239    -4.472    -0.233     (0)  
+   NaCO3-          1.250e-05   1.093e-05    -4.903    -4.961    -0.058     (0)  
+   CaCO3           5.521e-06   5.547e-06    -5.258    -5.256     0.002     (0)  
+   NaHCO3          8.272e-07   8.311e-07    -6.082    -6.080     0.002     (0)  
+   CaHCO3+         1.212e-07   1.063e-07    -6.916    -6.973    -0.057     (0)  
+   CO2             2.244e-08   2.255e-08    -7.649    -7.647     0.002     (0)  
+Ca            1.738e-04
+   Ca+2            1.680e-04   9.817e-05    -3.775    -4.008    -0.233     (0)  
+   CaCO3           5.521e-06   5.547e-06    -5.258    -5.256     0.002     (0)  
+   CaOH+           1.573e-07   1.379e-07    -6.803    -6.860    -0.057     (0)  
+   CaHCO3+         1.212e-07   1.063e-07    -6.916    -6.973    -0.057     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.732e-02    -1.699    -1.761    -0.062     (0)  
+H(0)          4.174e-39
+   H2              2.087e-39   2.097e-39   -38.680   -38.678     0.002     (0)  
+Na            2.000e-02
+   Na+             1.999e-02   1.741e-02    -1.699    -1.759    -0.060     (0)  
+   NaCO3-          1.250e-05   1.093e-05    -4.903    -4.961    -0.058     (0)  
+   NaHCO3          8.272e-07   8.311e-07    -6.082    -6.080     0.002     (0)  
+O(0)          1.885e-15
+   O2              9.424e-16   9.469e-16   -15.026   -15.024     0.002     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite        -0.14     -8.48   -8.34  CaCO3
+  Calcite           0.00     -8.48   -8.48  CaCO3
+  CH4(g)         -122.51   -125.37   -2.86  CH4
+  CO2(g)           -6.18     -7.65   -1.47  CO2
+  H2(g)           -35.53    -38.68   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -5.10     -3.52    1.58  NaCl
+  Lime            -16.73     15.85   32.58  CaO
+  Nahcolite        -5.28     -5.83   -0.55  NaHCO3
+  Natron           -6.68     -7.99   -1.31  Na2CO3:10H2O
+  O2(g)           -12.13    -15.02   -2.89  O2
+  Portlandite      -6.95     15.85   22.80  Ca(OH)2
+  Thermonatrite    -8.12     -7.99    0.13  Na2CO3:H2O
+  Trona           -13.03    -13.82   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 5.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 4: Find pH and solids precipitated of an aqueous solution
+	      with 0.01 mol CaCl2, 0.1 NaOH and 0.001 Na2CO3
+	      Several solids may precipitate.
+	      Expected: pH = 12.841, calcite = 9.83e-04, portlandite = 3.38e-03
+	      **************************************************************************
+	SOLUTION
+	    temp      25
+	    pH        7 charge
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    C(4)      0.001
+	    Na        0.102
+	    Ca        0.01
+	    Cl        0.02
+	    water    1 # kg
+	EQUILIBRIUM_PHASES
+	    Calcite     0 0
+	    Aragonite   0 0
+	    Portlandite 0 0
+	    Lime        0 0
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 4: Find pH and solids precipitated of an aqueous solution
+      with 0.01 mol CaCl2, 0.1 NaOH and 0.001 Na2CO3
+      Several solids may precipitate.
+      Expected: pH = 12.841, calcite = 9.83e-04, portlandite = 3.38e-03
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =    55.6 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C(4)              1.000e-03   1.000e-03
+	Ca                1.000e-02   1.000e-02
+	Cl                2.000e-02   2.000e-02
+	Na                1.020e-01   1.020e-01
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =  12.858      Charge balance
+                                       pe  =   0.940      Equilibrium with O2(g)
+                        Activity of water  =   0.996
+                 Ionic strength (mol/kgw)  =   1.239e-01
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   1.020e-01
+                       Total CO2 (mol/kg)  =   1.000e-03
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =  -3.331e-16
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  -0.00
+                               Iterations  =  11
+                                  Total H  = 1.111124e+02
+                                  Total O  = 5.560922e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             9.657e-02   7.195e-02    -1.015    -1.143    -0.128     (0)  
+   H+              1.697e-13   1.386e-13   -12.770   -12.858    -0.088      0.00
+   H2O             5.551e+01   9.961e-01     1.744    -0.002     0.000     18.07
+C(4)          1.000e-03
+   CaCO3           4.408e-04   4.535e-04    -3.356    -3.343     0.012     (0)  
+   CO3-2           3.326e-04   1.202e-04    -3.478    -3.920    -0.442     (0)  
+   NaCO3-          2.262e-04   1.754e-04    -3.646    -3.756    -0.111     (0)  
+   HCO3-           4.580e-07   3.551e-07    -6.339    -6.450    -0.111     (0)  
+   NaHCO3          1.521e-08   1.565e-08    -7.818    -7.805     0.012     (0)  
+   CaHCO3+         1.303e-08   1.020e-08    -7.885    -7.991    -0.106     (0)  
+   CO2             1.080e-13   1.111e-13   -12.967   -12.954     0.012     (0)  
+Ca            1.000e-02
+   Ca+2            6.129e-03   2.253e-03    -2.213    -2.647    -0.435     (0)  
+   CaOH+           3.430e-03   2.687e-03    -2.465    -2.571    -0.106     (0)  
+   CaCO3           4.408e-04   4.535e-04    -3.356    -3.343     0.012     (0)  
+   CaHCO3+         1.303e-08   1.020e-08    -7.885    -7.991    -0.106     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.496e-02    -1.699    -1.825    -0.126     (0)  
+H(0)          3.492e-31
+   H2              1.746e-31   1.797e-31   -30.758   -30.746     0.012     (0)  
+Na            1.020e-01
+   Na+             1.018e-01   7.837e-02    -0.992    -1.106    -0.113     (0)  
+   NaCO3-          2.262e-04   1.754e-04    -3.646    -3.756    -0.111     (0)  
+   NaHCO3          1.521e-08   1.565e-08    -7.818    -7.805     0.012     (0)  
+O(0)          2.490e-31
+   O2              1.245e-31   1.281e-31   -30.905   -30.892     0.012     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite         1.77     -6.57   -8.34  CaCO3
+  Calcite           1.91     -6.57   -8.48  CaCO3
+  CO2(g)          -11.49    -12.95   -1.47  CO2
+  H2(g)           -27.60    -30.75   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -4.51     -2.93    1.58  NaCl
+  Lime             -9.51     23.07   32.58  CaO
+  Nahcolite        -7.01     -7.56   -0.55  NaHCO3
+  Natron           -4.84     -6.15   -1.31  Na2CO3:10H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+  Portlandite       0.27     23.07   22.80  Ca(OH)2
+  Thermonatrite    -6.26     -6.13    0.13  Na2CO3:H2O
+  Trona           -12.90    -13.69   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+-----------------------------------------
+Beginning of batch-reaction calculations.
+-----------------------------------------
+
+Reaction step 1.
+
+Using solution 1.	
+Using pure phase assemblage 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   296.7 mV  (slope =  59.16 ) 
+**************************************** 
+
+-------------------------------Phase assemblage--------------------------------
+
+                                                      Moles in assemblage
+Phase               SI  log IAP  log K(T, P)   Initial       Final       Delta
+
+Aragonite        -0.14    -8.48     -8.34    0.000e+00           0   0.000e+00
+Calcite           0.00    -8.48     -8.48    0.000e+00   9.833e-04   9.833e-04
+Lime             -9.77    22.80     32.58    0.000e+00           0   0.000e+00
+Portlandite       0.00    22.80     22.80    0.000e+00   3.473e-03   3.473e-03
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C                 1.666e-05   1.666e-05
+	Ca                5.544e-03   5.544e-03
+	Cl                2.000e-02   2.000e-02
+	Na                1.020e-01   1.020e-01
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =  12.836      Charge balance
+                                       pe  =   5.016      Adjusted to redox equilibrium
+                        Activity of water  =   0.996
+                 Ionic strength (mol/kgw)  =   1.147e-01
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   9.309e-02
+                       Total CO2 (mol/kg)  =   1.666e-05
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =  -5.551e-16
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  -0.00
+                               Iterations  =  35
+                                  Total H  = 1.111055e+02
+                                  Total O  = 5.559932e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             9.111e-02   6.843e-02    -1.040    -1.165    -0.124     (0)  
+   H+              1.778e-13   1.458e-13   -12.750   -12.836    -0.086      0.00
+   H2O             5.551e+01   9.963e-01     1.744    -0.002     0.000     18.07
+C(-4)         0.000e+00
+   CH4             0.000e+00   0.000e+00  -133.038  -133.026     0.011     (0)  
+C(4)          1.666e-05
+   CO3-2           6.625e-06   2.452e-06    -5.179    -5.610    -0.432     (0)  
+   CaCO3           5.403e-06   5.547e-06    -5.267    -5.256     0.011     (0)  
+   NaCO3-          4.625e-06   3.607e-06    -5.335    -5.443    -0.108     (0)  
+   HCO3-           9.770e-09   7.621e-09    -8.010    -8.118    -0.108     (0)  
+   NaHCO3          3.297e-10   3.386e-10    -9.482    -9.470     0.011     (0)  
+   CaHCO3+         1.666e-10   1.313e-10    -9.778    -9.882    -0.104     (0)  
+   CO2             2.441e-15   2.507e-15   -14.612   -14.601     0.011     (0)  
+Ca            5.544e-03
+   Ca+2            3.594e-03   1.350e-03    -2.444    -2.870    -0.425     (0)  
+   CaOH+           1.945e-03   1.532e-03    -2.711    -2.815    -0.104     (0)  
+   CaCO3           5.403e-06   5.547e-06    -5.267    -5.256     0.011     (0)  
+   CaHCO3+         1.666e-10   1.313e-10    -9.778    -9.882    -0.104     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.508e-02    -1.699    -1.822    -0.123     (0)  
+H(0)          2.721e-39
+   H2              1.361e-39   1.397e-39   -38.866   -38.855     0.011     (0)  
+Na            1.020e-01
+   Na+             1.020e-01   7.900e-02    -0.991    -1.102    -0.111     (0)  
+   NaCO3-          4.625e-06   3.607e-06    -5.335    -5.443    -0.108     (0)  
+   NaHCO3          3.297e-10   3.386e-10    -9.482    -9.470     0.011     (0)  
+O(0)          4.129e-15
+   O2              2.065e-15   2.120e-15   -14.685   -14.674     0.011     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite        -0.14     -8.48   -8.34  CaCO3
+  Calcite           0.00     -8.48   -8.48  CaCO3
+  CH4(g)         -130.17   -133.03   -2.86  CH4
+  CO2(g)          -13.13    -14.60   -1.47  CO2
+  H2(g)           -35.70    -38.85   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -4.51     -2.92    1.58  NaCl
+  Lime             -9.77     22.80   32.58  CaO
+  Nahcolite        -8.67     -9.22   -0.55  NaHCO3
+  Natron           -6.52     -7.83   -1.31  Na2CO3:10H2O
+  O2(g)           -11.78    -14.67   -2.89  O2
+  Portlandite       0.00     22.80   22.80  Ca(OH)2
+  Thermonatrite    -7.94     -7.82    0.13  Na2CO3:H2O
+  Trona           -16.24    -17.04   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 6.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 5: Find pH of an aqueous solution with 0.02 mol NaCl and 0.001 Na2CO3
+	      This is a system with several possible solid products,
+	      similar to Test 4, but here no solid precipitates.
+	      Expected: pH= 10.416
+	      **************************************************************************
+	SOLUTION
+	    temp      25
+	    pH        7 charge
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    C(4)      0.001
+	    Na        0.022
+	    Cl        0.02
+	    Ca        1e-25  # to suppress warning messages
+	    water    1 # kg
+	EQUILIBRIUM_PHASES
+	    Calcite     0 0
+	    Aragonite   0 0
+	    Portlandite 0 0
+	    Lime        0 0
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 5: Find pH of an aqueous solution with 0.02 mol NaCl and 0.001 Na2CO3
+      This is a system with several possible solid products,
+      similar to Test 4, but here no solid precipitates.
+      Expected: pH= 10.416
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   199.9 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C(4)              1.000e-03   1.000e-03
+	Ca                1.000e-25   1.000e-25
+	Cl                2.000e-02   2.000e-02
+	Na                2.200e-02   2.200e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =  10.419      Charge balance
+                                       pe  =   3.378      Equilibrium with O2(g)
+                        Activity of water  =   0.999
+                 Ionic strength (mol/kgw)  =   2.243e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   2.000e-03
+                       Total CO2 (mol/kg)  =   1.000e-03
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =  -5.851e-13
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  -0.00
+                               Iterations  =   7
+                                  Total H  = 1.110130e+02
+                                  Total O  = 5.550952e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             3.049e-04   2.624e-04    -3.516    -3.581    -0.065     (0)  
+   H+              4.306e-11   3.812e-11   -10.366   -10.419    -0.053      0.00
+   H2O             5.551e+01   9.993e-01     1.744    -0.000     0.000     18.07
+C(4)          1.000e-03
+   CO3-2           5.639e-04   3.235e-04    -3.249    -3.490    -0.241     (0)  
+   HCO3-           3.021e-04   2.629e-04    -3.520    -3.580    -0.060     (0)  
+   NaCO3-          1.312e-04   1.141e-04    -3.882    -3.943    -0.060     (0)  
+   NaHCO3          2.787e-06   2.802e-06    -5.555    -5.553     0.002     (0)  
+   CO2             2.243e-08   2.255e-08    -7.649    -7.647     0.002     (0)  
+   CaCO3           2.352e-26   2.365e-26   -25.629   -25.626     0.002     (0)  
+   CaHCO3+         1.676e-28   1.463e-28   -27.776   -27.835    -0.059     (0)  
+Ca            1.000e-25
+   Ca+2            7.609e-26   4.363e-26   -25.119   -25.360    -0.242     (0)  
+   CaCO3           2.352e-26   2.365e-26   -25.629   -25.626     0.002     (0)  
+   CaOH+           2.175e-28   1.898e-28   -27.663   -27.722    -0.059     (0)  
+   CaHCO3+         1.676e-28   1.463e-28   -27.776   -27.835    -0.059     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.723e-02    -1.699    -1.764    -0.065     (0)  
+H(0)          3.586e-31
+   H2              1.793e-31   1.802e-31   -30.746   -30.744     0.002     (0)  
+Na            2.200e-02
+   Na+             2.187e-02   1.895e-02    -1.660    -1.722    -0.062     (0)  
+   NaCO3-          1.312e-04   1.141e-04    -3.882    -3.943    -0.060     (0)  
+   NaHCO3          2.787e-06   2.802e-06    -5.555    -5.553     0.002     (0)  
+O(0)          2.549e-31
+   O2              1.275e-31   1.281e-31   -30.895   -30.892     0.002     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite       -20.51    -28.85   -8.34  CaCO3
+  Calcite         -20.37    -28.85   -8.48  CaCO3
+  CO2(g)           -6.18     -7.65   -1.47  CO2
+  H2(g)           -27.59    -30.74   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -5.07     -3.49    1.58  NaCl
+  Lime            -37.10     -4.52   32.58  CaO
+  Nahcolite        -4.75     -5.30   -0.55  NaHCO3
+  Natron           -5.63     -6.94   -1.31  Na2CO3:10H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+  Portlandite     -27.32     -4.52   22.80  Ca(OH)2
+  Thermonatrite    -7.06     -6.94    0.13  Na2CO3:H2O
+  Trona           -11.44    -12.24   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+-----------------------------------------
+Beginning of batch-reaction calculations.
+-----------------------------------------
+
+Reaction step 1.
+
+Using solution 1.	
+Using pure phase assemblage 1.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   276.8 mV  (slope =  59.16 ) 
+**************************************** 
+
+-------------------------------Phase assemblage--------------------------------
+
+                                                      Moles in assemblage
+Phase               SI  log IAP  log K(T, P)   Initial       Final       Delta
+
+Aragonite       -20.51   -28.85     -8.34    0.000e+00           0   0.000e+00
+Calcite         -20.37   -28.85     -8.48    0.000e+00           0   0.000e+00
+Lime            -37.10    -4.52     32.58    0.000e+00           0   0.000e+00
+Portlandite     -27.32    -4.52     22.80    0.000e+00           0   0.000e+00
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	C                 1.000e-03   1.000e-03
+	Ca                1.000e-25   1.000e-25
+	Cl                2.000e-02   2.000e-02
+	Na                2.200e-02   2.200e-02
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =  10.419      Charge balance
+                                       pe  =   4.678      Adjusted to redox equilibrium
+                        Activity of water  =   0.999
+                 Ionic strength (mol/kgw)  =   2.243e-02
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =   2.000e-03
+                       Total CO2 (mol/kg)  =   1.000e-03
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =  -5.918e-13
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =  -0.00
+                               Iterations  =   1
+                                  Total H  = 1.110130e+02
+                                  Total O  = 5.550952e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             3.049e-04   2.624e-04    -3.516    -3.581    -0.065     (0)  
+   H+              4.306e-11   3.812e-11   -10.366   -10.419    -0.053      0.00
+   H2O             5.551e+01   9.993e-01     1.744    -0.000     0.000     18.07
+C(-4)         0.000e+00
+   CH4             0.000e+00   0.000e+00  -104.035  -104.033     0.002     (0)  
+C(4)          1.000e-03
+   CO3-2           5.639e-04   3.235e-04    -3.249    -3.490    -0.241     (0)  
+   HCO3-           3.021e-04   2.629e-04    -3.520    -3.580    -0.060     (0)  
+   NaCO3-          1.312e-04   1.141e-04    -3.882    -3.943    -0.060     (0)  
+   NaHCO3          2.787e-06   2.802e-06    -5.555    -5.553     0.002     (0)  
+   CO2             2.243e-08   2.255e-08    -7.649    -7.647     0.002     (0)  
+   CaCO3           2.352e-26   2.365e-26   -25.629   -25.626     0.002     (0)  
+   CaHCO3+         1.676e-28   1.463e-28   -27.776   -27.835    -0.059     (0)  
+Ca            1.000e-25
+   Ca+2            7.609e-26   4.363e-26   -25.119   -25.360    -0.242     (0)  
+   CaCO3           2.352e-26   2.365e-26   -25.629   -25.626     0.002     (0)  
+   CaOH+           2.175e-28   1.898e-28   -27.663   -27.722    -0.059     (0)  
+   CaHCO3+         1.676e-28   1.463e-28   -27.776   -27.835    -0.059     (0)  
+Cl            2.000e-02
+   Cl-             2.000e-02   1.723e-02    -1.699    -1.764    -0.065     (0)  
+H(0)          9.008e-34
+   H2              4.504e-34   4.528e-34   -33.346   -33.344     0.002     (0)  
+Na            2.200e-02
+   Na+             2.187e-02   1.895e-02    -1.660    -1.722    -0.062     (0)  
+   NaCO3-          1.312e-04   1.141e-04    -3.882    -3.943    -0.060     (0)  
+   NaHCO3          2.787e-06   2.802e-06    -5.555    -5.553     0.002     (0)  
+O(0)          4.040e-26
+   O2              2.020e-26   2.031e-26   -25.695   -25.692     0.002     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Aragonite       -20.51    -28.85   -8.34  CaCO3
+  Calcite         -20.37    -28.85   -8.48  CaCO3
+  CH4(g)         -101.17   -104.03   -2.86  CH4
+  CO2(g)           -6.18     -7.65   -1.47  CO2
+  H2(g)           -30.19    -33.34   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Halite           -5.07     -3.49    1.58  NaCl
+  Lime            -37.10     -4.52   32.58  CaO
+  Nahcolite        -4.75     -5.30   -0.55  NaHCO3
+  Natron           -5.63     -6.94   -1.31  Na2CO3:10H2O
+  O2(g)           -22.80    -25.69   -2.89  O2
+  Portlandite     -27.32     -4.52   22.80  Ca(OH)2
+  Thermonatrite    -7.06     -6.94    0.13  Na2CO3:H2O
+  Trona           -11.44    -12.24   -0.80  NaHCO3:Na2CO3:2H2O
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 7.
+------------------------------------
+
+	TITLE **************************************************************************
+	      Test 6. Find pH and redox potential and solids that precipitate
+	      for an aqueous solution with 1E-5 mol HCl and 0.01 mol Fe(metal).
+	      Several possible solid reaction products.
+	      Expected: pH= 7.819,  pe= -8.456,  magnetite= 0.00333 mol
+	      **************************************************************************
+	SOLUTION 4
+	    temp      25
+	    pH        7 charge
+	    pe        0 O2(g) -28  # neutral redox
+	    redox     pe
+	    units     mol/kgw
+	    density   1
+	    Cl        1.e-5
+	    water    1 # kg
+	REACTION
+	    Fe(alpha,cr) 1
+	    0.01 moles in 1 steps
+	EQUILIBRIUM_PHASES
+	    Magnetite     0 0
+	    Goethite      0 0
+	    Fe(OH)2(cr)   0 0
+	END
+-----
+TITLE
+-----
+
+ **************************************************************************
+      Test 6. Find pH and redox potential and solids that precipitate
+      for an aqueous solution with 1E-5 mol HCl and 0.01 mol Fe(metal).
+      Several possible solid reaction products.
+      Expected: pH= 7.819,  pe= -8.456,  magnetite= 0.00333 mol
+      **************************************************************************
+
+-------------------------------------------
+Beginning of initial solution calculations.
+-------------------------------------------
+
+Initial solution 4.	
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =   520.3 mV  (slope =  59.16 ) 
+**************************************** 
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	Cl                1.000e-05   1.000e-05
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =   5.002      Charge balance
+                                       pe  =   8.795      Equilibrium with O2(g)
+                        Activity of water  =   1.000
+                 Ionic strength (mol/kgw)  =   1.000e-05
+                       Mass of water (kg)  =   1.000e+00
+                 Total alkalinity (eq/kg)  =  -1.000e-05
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   2.883e-15
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.00
+                               Iterations  =   5
+                                  Total H  = 1.110124e+02
+                                  Total O  = 5.550622e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   H+              1.000e-05   9.964e-06    -5.000    -5.002    -0.002      0.00
+   OH-             1.008e-09   1.005e-09    -8.996    -8.998    -0.002     (0)  
+   H2O             5.551e+01   1.000e+00     1.744    -0.000     0.000     18.07
+Cl            1.000e-05
+   Cl-             1.000e-05   9.963e-06    -5.000    -5.002    -0.002     (0)  
+H(0)          3.608e-31
+   H2              1.804e-31   1.804e-31   -30.744   -30.744     0.000     (0)  
+O(0)          2.563e-31
+   O2              1.281e-31   1.281e-31   -30.892   -30.892     0.000     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  H2(g)           -27.59    -30.74   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  O2(g)           -28.00    -30.89   -2.89  O2
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+-----------------------------------------
+Beginning of batch-reaction calculations.
+-----------------------------------------
+
+Reaction step 1.
+
+Using solution 4.	
+Using pure phase assemblage 1.	
+Using reaction 1.	
+
+Reaction 1.	
+
+	  1.000e-02 moles of the following reaction have been added:
+
+	                 Relative
+	Reactant            moles
+
+	Fe(alpha,cr)         1.00000
+
+	                 Relative
+	Element             moles
+	Fe                   1.00000
+
+----------------------------------User print-----------------------------------
+
+**************************************** 
+Debye-Hückel A= 0.5100 , B= 0.3285 
+Eh =  -500.3 mV  (slope =  59.16 ) 
+Eh (Fe(2)/Fe(3)) = -500.3 mV  (pe =  -8.46 ) 
+**************************************** 
+
+-------------------------------Phase assemblage--------------------------------
+
+                                                      Moles in assemblage
+Phase               SI  log IAP  log K(T, P)   Initial       Final       Delta
+
+Fe(OH)2(cr)      -2.43    10.35     12.78    0.000e+00           0   0.000e+00
+Goethite         -2.31    -3.31     -1.00    0.000e+00           0   0.000e+00
+Magnetite        -0.00     3.74      3.74    0.000e+00   3.332e-03   3.332e-03
+
+-----------------------------Solution composition------------------------------
+
+	Elements           Molality       Moles
+
+	Cl                1.000e-05   1.000e-05
+	Fe                5.379e-06   5.377e-06
+
+----------------------------Description of solution----------------------------
+
+                                       pH  =   7.819      Charge balance
+                                       pe  =  -8.456      Adjusted to redox equilibrium
+                        Activity of water  =   1.000
+                 Ionic strength (mol/kgw)  =   1.593e-05
+                       Mass of water (kg)  =   9.998e-01
+                 Total alkalinity (eq/kg)  =   7.551e-07
+                         Temperature (oC)  =  25.00
+                  Electrical balance (eq)  =   2.978e-15
+ Percent error, 100*(Cat-|An|)/(Cat+|An|)  =   0.00
+                               Iterations  =  27
+                                  Total H  = 1.110124e+02
+                                  Total O  = 5.549289e+01
+
+----------------------------Distribution of species----------------------------
+
+                                               Log       Log       Log    mole V
+   Species          Molality    Activity  Molality  Activity     Gamma   cm3/mol
+
+   OH-             6.621e-07   6.590e-07    -6.179    -6.181    -0.002     (0)  
+   H+              1.526e-08   1.519e-08    -7.817    -7.819    -0.002      0.00
+   H2O             5.551e+01   9.998e-01     1.744    -0.000     0.000     18.07
+Cl            1.000e-05
+   Cl-             1.000e-05   9.956e-06    -5.000    -5.002    -0.002     (0)  
+   FeCl+           7.143e-11   7.110e-11   -10.146   -10.148    -0.002     (0)  
+   FeCl+2          5.296e-31   5.198e-31   -30.276   -30.284    -0.008     (0)  
+   FeCl2+          2.322e-35   2.312e-35   -34.634   -34.636    -0.002     (0)  
+   FeCl3           0.000e+00   0.000e+00   -40.638   -40.638     0.000     (0)  
+Fe(2)         5.379e-06
+   Fe+2            5.270e-06   5.173e-06    -5.278    -5.286    -0.008     (0)  
+   FeOH+           1.082e-07   1.077e-07    -6.966    -6.968    -0.002     (0)  
+   FeCl+           7.143e-11   7.110e-11   -10.146   -10.148    -0.002     (0)  
+   Fe(OH)2         6.034e-11   6.034e-11   -10.219   -10.219     0.000     (0)  
+   Fe(OH)3-        1.483e-13   1.476e-13   -12.829   -12.831    -0.002     (0)  
+Fe(3)         1.601e-16
+   Fe(OH)3         1.358e-16   1.358e-16   -15.867   -15.867     0.000     (0)  
+   Fe(OH)2+        1.609e-17   1.602e-17   -16.793   -16.795    -0.002     (0)  
+   Fe(OH)4-        8.193e-18   8.155e-18   -17.087   -17.089    -0.002     (0)  
+   FeOH+2          7.486e-22   7.348e-22   -21.126   -21.134    -0.008     (0)  
+   Fe+3            1.802e-27   1.729e-27   -26.744   -26.762    -0.018     (0)  
+   FeCl+2          5.296e-31   5.198e-31   -30.276   -30.284    -0.008     (0)  
+   FeCl2+          2.322e-35   2.312e-35   -34.634   -34.636    -0.002     (0)  
+   FeCl3           0.000e+00   0.000e+00   -40.638   -40.638     0.000     (0)  
+   Fe2(OH)2+4      0.000e+00   0.000e+00   -40.805   -40.838    -0.032     (0)  
+   Fe3(OH)4+5      0.000e+00   0.000e+00   -55.262   -55.313    -0.051     (0)  
+H(0)          2.667e-02
+   H2              1.333e-02   1.333e-02    -1.875    -1.875     0.000     (0)  
+O(0)          0.000e+00
+   O2              0.000e+00   0.000e+00   -88.630   -88.630     0.000     (0)  
+
+------------------------------Saturation indices-------------------------------
+
+  Phase               SI** log IAP   log K(298 K,   1 atm)
+
+  Fe(alpha,cr)     -4.26     11.63   15.89  Fe
+  Fe(OH)2(cr)      -2.43     10.35   12.78  Fe(OH)2
+  Fe(OH)2.7Cl.3    -4.11     -7.15   -3.04  Fe(OH)2.7Cl0.3
+  Fe(OH)3(a)       -8.20     -3.31    4.89  Fe(OH)3
+  Fe3(OH)8        -16.49      3.74   20.22  Fe3(OH)8
+  Goethite         -2.31     -3.31   -1.00  FeOOH
+  H2(g)             1.27     -1.88   -3.15  H2
+  H2O(g)           -1.51     -0.00    1.51  H2O
+  Hematite         -2.61     -6.61   -4.01  Fe2O3
+  Maghemite       -13.00     -6.61    6.39  Fe2O3
+  Magnetite        -0.00      3.74    3.74  Fe3O4
+  O2(g)           -85.74    -88.63   -2.89  O2
+
+**For a gas, SI = log10(fugacity). Fugacity = pressure * phi / 1 atm.
+  For ideal gases, phi = 1.
+
+------------------
+End of simulation.
+------------------
+
+------------------------------------
+Reading input data for simulation 8.
+------------------------------------
+
+-------------------------------
+End of Run after 0.234 Seconds.
+-------------------------------
+

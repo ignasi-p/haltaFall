@@ -1,0 +1,41 @@
+ 6, 10, 4, 0,
+H+
+CO3 2-
+Ca 2+
+H2O
+Na+
+Cl-
+CO2                 ,  16.681    2  1  0 -1  0  0
+HCO3-               ,  10.329    1  1  0  0  0  0
+H2CO3               ,  13.859    2  1  0  0  0  0
+CaCO3               ,  3.224     0  1  1  0  0  0
+CaHCO3+             ,  11.435    1  1  1  0  0  0
+CaOH+               , -12.78    -1  0  1  1  0  0
+OH-                 , -14.00    -1  0  0  1  0  0
+NaCO3-              ,  1.27      0  1  0  0  1  0
+NaHCO3              ,  10.079    1  1  0  0  1  0
+NaOH                , -14.4     -1  0  0  1  1  0
+CaCO3(cr)           ,  8.48      0  1  1  0  0  0 /calcite
+Ca(OH)2(cr)         , -22.80    -2  0  1  2  0  0 /portlandite
+CaCO3(s)            ,  8.336     0  1  1  0  0  0 /aragonite
+CaO(cr)             , -32.7     -2  0  1  1  0  0
+-5 /H+     CO3-2    Ca+2     H2O      Na+      Cl-
+  LA,-8.2, T,0.01,  T,0,     LA,0,    T,0.01   T,0
+  T,0.01,  T,0.01,  T,0,     LA,0,    T,0.01,  T,0,
+  T,0,     T,0.01,  T,0.01,  La,0,    T,0.02,  T,0.02,
+  T,-0.1,  T,0.001, T,0.01,  LA,0,    T,0.102, T,0.02,
+  T,0.,    T,0.001, T,-0.1,  LA,0,    T,0.022, T,0.02,
+The results from this calculation may be compared with those from PhreeqC.
+point 1: Speciation at pH=8.2 of an aqueous solution with 0.01 mol NaHCO3
+         expected: [CO3-2] = 9.85e-5
+point 2: Find the pH of an aqueous solution with 0.01 mol NaHCO3
+         expected: pH = 8.222
+point 3: Find pH and calcite precipitated of an aqueous solution
+         with 0.01 mol CaCl2 and 0.01 Na2CO3
+         expected: pH = 9.93 calcite = 9.82e-03
+point 4: Find pH and solids precipitated of an aqueous solution
+         with 0.01 mol CaCl2, 0.1 NaOH and 0.001 Na2CO3
+         expected: pH = 12.84, calcite = 9.83e-04, portlandite = 3.38e-03
+point 5: Find pH of an aqueous solution with 0.02 mol NaCl and 0.001 Na2CO3
+         (note that the total concentration of calcium is less than zero)
+         expected: pH = 10.416

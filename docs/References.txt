@@ -1,0 +1,25 @@
+HaltaFall References
+
+ -  Ingri N, Kakołowicz W, Sillén L G, Warnqvist B, 1967. High-speed
+    computers as a supplement to graphical methods - V. HALTAFALL, a general
+    program for calculating the composition of equilibrium mixtures.
+    Talanta 14, 1261–1286. https://doi.org/10.1016/0039-9140(67)80203-0
+
+ -  Ingri N, Kakołowicz W, Sillén L G, Warnqvist B, 1968. Errata.
+    Talanta 15, xi–xii. https://doi.org/10.1016/0039-9140(68)80071-2
+
+ -  Elgquist B, 1969. A Fortran version of Haltafall for computing
+    ionic equilibria. Talanta 16, 1502–1503.
+    https://doi.org/10.1016/0039-9140(69)80208-0
+
+ -  Anfält T,Jagner  D, 1969. Interpretation of titration curves by means
+    of the computer program HaltaFall, Analytica Chimica Acta 47, 57-69.
+    https://doi.org/10.1016/S0003-2670(01)81805-5.
+
+ -  Ekelund R, Sillén L G, Wahlberg O, 1970. Fortran editions of Haltafall
+    and Letagrop. Acta Chemica Scandinavica 24, 3073.
+    https://doi.org/10.3891/acta.chem.scand.24-3073
+
+ -  Warnqvist B, Ingri N, 1971. The HALTAFALL program - some corrections,
+    and comments on recent experience. Talanta 18, 457–458.
+    https://doi.org/10.1016/0039-9140(71)80069-3

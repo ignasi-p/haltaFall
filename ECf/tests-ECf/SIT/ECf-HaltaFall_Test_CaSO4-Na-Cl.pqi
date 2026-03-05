@@ -1,0 +1,167 @@
+DATABASE C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\database\sit.dat
+TITLE This PhreeqC input file is used to perform the same calculation
+      as defined in the EC-input file 'CaSO4-Na-Cl_ECf.dat'.
+      The purpose is to compare this PhreeqC results with those from
+      the EC software.
+      .
+      First the equilibrium constants are given to make sure they are
+      the same as in 'CaSO4-Na-Cl_ECf.dat'.
+      Then SIT-epsilon values are given so that they are the same as
+      in file 'SIT-coefficients.dta', which is used by the EC software.
+
+SOLUTION_SPECIES
+1.000H+     + 1.000SO4-2     = H(SO4)-
+     log_k     1.980     
+1.000Ca+2     - 1.000H+     + 1.000H2O     = Ca(OH)+
+     log_k   -12.780
+1.000Ca+2     + 1.000SO4-2     = Ca(SO4)
+     log_k     2.310
+1.000Ca+2     + 1.000CO3-2     = CaCO3
+     log_k     3.220
+- 1.000H+     + 1.000H2O     = OH-
+     log_k   -14.000     
+- 8 H+ - 8 e- + Cl- + 4 H2O = ClO4-
+      log_k -9999.  #supress the formation of perchlorate
+- 2 e- + 2 Cl- = Cl2
+      log_k -9999.  #supress the formation
+9 H+ + 8 e- + SO4-2 - 4 H2O = HS-
+      log_k -9999.  #supress the formation
+10 H+ + 8 e- + 2 SO4-2 - 5 H2O = S2O3-2
+      log_k -9999.  #supress the formation
+8 H+ + 6 e- + 2 SO4-2 - 4 H2O = S2O4-2
+      log_k -9999.  #supress the formation
+2 H+ + 2 e- + SO4-2 - H2O = SO3-2
+      log_k -9999.  #supress the formation
+- H+ - 2 e- + SO4-2 + H2O = HSO5-
+      log_k -9999.  #supress the formation
+
+PHASES
+Gypsum
+CaSO4:2H2O     = 1.000Ca+2     + 1.000SO4-2     + 2.000H2O
+     log_k    -4.610     
+Anhydrite
+Ca(SO4)      = 1.000Ca+2     + 1.000SO4-2
+     log_k    -4.440     
+Halite
+NaCl     = 1.000Na+     + 1.000Cl-
+     log_k     1.590     
+Fix_H+ 
+     H+ = H+ 
+     log_k  0.0
+
+SIT
+-epsilon
+Ca+2                  Cl-       0.140
+Cl-                   Na+       0.030
+H(SO4)-               Na+       -0.010
+H+                    Cl-       0.120
+OH-                   Na+       0.040
+SO4-2                 Na+       -0.120
+H+     SO4-2    0.
+H+     H(SO4)-  0.
+Ca+2    SO4-2   0.
+Ca+2    H(SO4)- 0.
+Ca+2    OH-     0.
+Ca(OH)+ SO4-2   0.
+Ca(OH)+ H(SO4)- 0.
+Ca(OH)+ Cl-     0.
+Ca(OH)+ OH-     0.
+OH-     H+      0.
+
+USER_PRINT
+-start
+10 PRINT "Debye-Hückel A=",DH_A,", B=",DH_B
+-end
+
+TITLE **************************************************************************
+      Test 1: Speciation at pH=7 of an aqueous solution with 0.5 mol Na2SO4
+      Expected: log act-coef for H(SO4)- = -0.230, I= 1.5,
+      .         osmotic coefficient (phi)= 0.723
+      **************************************************************************
+SOLUTION
+    temp      25
+    pH        7
+    pe        4
+    redox     pe
+    units     mol/kgw
+    density   1
+    Na        1.0
+    S(6)      0.5
+    -water    1 # kg
+END
+
+TITLE **************************************************************************
+      Make SOLUTION 1 (pure water) that will be used as a starting point
+      for subsequent calculations
+      **************************************************************************
+SOLUTION 1
+    temp      25
+    pH        7
+    pe        4
+    redox     pe
+    units     mol/kgw
+    density   1
+    Na        0.
+    Cl        0.
+    Ca        0.
+    S(6)      0.
+    -water    1 # kg
+SAVE solution 1
+END
+
+TITLE **************************************************************************
+      Test 2: Find the solubility of gypsum in 0.2 mol NaCl
+      expected: 0.0249 (=Ca conc.)
+      .         I= 0.279, pH= 7.06, osmotic coeff.= 0.901, 
+      **************************************************************************
+USE solution 1
+REACTION
+    Gypsum     1
+    NaCl       1
+    0.2 moles in 1 steps
+EQUILIBRIUM_PHASES
+    Gypsum    0 0
+    Anhydrite 0 0
+END
+
+TITLE **************************************************************************
+      Test 3: Find the solubility of gypsum in 0.2 mol H2SO4
+      expected: 0.0172 (=Ca conc.), I= 0.292,
+      .         osmotic coeff.= 0.890, pH= 0.806
+      **************************************************************************
+USE solution 1
+REACTION
+    Gypsum    1
+    H2SO4     1
+    0.2 moles in 1 steps
+EQUILIBRIUM_PHASES
+    Gypsum    0 0
+    Anhydrite 0 0
+END
+
+TITLE **************************************************************************
+      Test 4: Find the solubility of halite in H2O
+      expected: 7.13 (=Na conc.), pH= 6.78
+      .         I= 7.13, osmotic coefff.= 1.169
+      **************************************************************************
+USE solution 1
+REACTION
+    NaCl     1
+    8 moles in 1 steps
+EQUILIBRIUM_PHASES
+    Halite    0 0
+SAVE solution 2
+END
+
+TITLE **************************************************************************
+      Test 5: Find the solubility of halite in 1 mol/kgw CaCl2
+      expected: 5.49 (=Na conc.), pH= 6.03
+      .         I= 8.49, osmotic coefficient (phi)= 1.285
+      **************************************************************************
+USE solution 2
+REACTION
+    CaCl2     1
+    1.0 moles in 1 steps
+EQUILIBRIUM_PHASES
+    Halite    0 0
+END

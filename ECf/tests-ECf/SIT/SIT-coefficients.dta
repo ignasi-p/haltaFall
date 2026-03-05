@@ -1,0 +1,64 @@
+/ File 'SIT-coefficients.dta'.
+/
+/ Specific Ion interaction model for activity coefficients (the "SIT" model).
+/ This file contains parameters (epsilon) to calculate specific ion
+/ interactions according to the SIT.  The file contains epsilon values
+/ between two species, that is, between cation-anion (or anion-cation),
+/ as well as between neutral-cation, neutral-anion and neutral-neutral
+/ species.
+/
+/ In the SIT, for two ions 'i' and 'j', with electric charges Zi and Zj,
+/ eps(i,j) = eps(j,i), and eps(i,j) = 0 if (Zi x Zj) > 0.
+/
+/ The file format is:
+/    'first' species name, 'second' species name, epsilon value,
+/ where both the first and second species can be either a cation,
+/ an anion or a neutral species.
+/
+/ Last line: must be "end" (witout quotes).
+/
+/ First non-commented line: if it is "nodefaults" (witout
+/ quotes, case-insensitive) then default epsilon values will
+/ NOT be gived to ion-interactions where no data has been
+/ assigned in this file. The default is to assign default values.
+/
+
+nodefaults
+
+/ Note: because of "nodefaults"
+/ any eps-values that are not given here will be zero.
+
+/ These are the eps-values that are needed in this case;
+/ all values are from the file "sit.dat" distributed with
+/ PhreeqC version 3. https://www.usgs.gov/software/phreeqc-version-3
+Ca+2, Cl-, 0.14
+Cl-, Na+, 0.03
+HSO4-, Na+, -0.01
+H+, Cl-, 0.12
+Na+, OH-, 0.04
+SO4-2, Na+, -0.12
+
+/ these values are not given in the Phreeqc database,
+/ so we set them to zero:
+H+,     SO4-2,  0.
+H+,     HSO4-,  0.
+Ca+2,    SO4-2, 0.
+Ca+2,    HSO4-, 0.
+Ca+2,    OH-,   0.
+CaOH+,   SO4-2, 0.
+CaOH+,   HSO4-, 0.
+CaOH+,   Cl-,   0.
+CaOH+,   OH-,   0.
+OH-,     H+,    0.
+CaSO4, Na+,    0.
+CaSO4, Cl-,    0.
+CaSO4, H+,     0.
+CaSO4, SO4-2,  0.
+CaSO4, HSO4-,  0.
+CaSO4, Ca+2,   0.
+CaSO4, CaOH+,  0.
+CaSO4, CaSO4,  0.
+CaSO4, OH-,    0.
+
+end
+
